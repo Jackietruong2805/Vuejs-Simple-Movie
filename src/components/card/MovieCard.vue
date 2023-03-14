@@ -1,10 +1,10 @@
 <script setup>
 
 const props = defineProps({
-    src: () => string,
-    title: () => string,
-    yearAdded: () => Number || String,
-    rate: () => Number
+    src: String,
+    title: String,
+    yearAdded: String,
+    rate: Number
 });
 </script>
 

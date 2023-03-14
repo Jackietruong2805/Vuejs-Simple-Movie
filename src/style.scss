@@ -12,4 +12,12 @@
   .menu{
     @apply no-underline list-none
   }
+  .mySwiper .swiper-button-prev, .mySwiper .swiper-button-next{
+    background-color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    color: hotpink;
+    text-align: center;
+}
 }
