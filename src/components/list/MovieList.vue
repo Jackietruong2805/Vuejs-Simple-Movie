@@ -4,52 +4,28 @@ import 'swiper/css';
 import { Navigation } from 'swiper';
 import { SwiperSlide, Swiper } from 'swiper/vue';
 import 'swiper/css/navigation';
+import { ref, onMounted } from "vue";
+import axios from "axios";
 
 const modules = [Navigation]
-const movies = [
-    {
-        src: "https://upload.wikimedia.org/wikipedia/en/7/78/Puss_in_Boots_The_Last_Wish_poster.jpg",
-        title: "Puss in Boots",
-        yearAdded: "2022",
-        rate: 8.4
-    },
-    {
-        src: "https://upload.wikimedia.org/wikipedia/en/7/78/Puss_in_Boots_The_Last_Wish_poster.jpg",
-        title: "Puss in Boots",
-        yearAdded: "2022",
-        rate: 8.4
-    },
-    {
-        src: "https://upload.wikimedia.org/wikipedia/en/7/78/Puss_in_Boots_The_Last_Wish_poster.jpg",
-        title: "Puss in Boots",
-        yearAdded: "2022",
-        rate: 8.4
-    },
-    {
-        src: "https://upload.wikimedia.org/wikipedia/en/7/78/Puss_in_Boots_The_Last_Wish_poster.jpg",
-        title: "Puss in Boots",
-        yearAdded: "2022",
-        rate: 8.4
-    },
-    {
-        src: "https://upload.wikimedia.org/wikipedia/en/7/78/Puss_in_Boots_The_Last_Wish_poster.jpg",
-        title: "Puss in Boots",
-        yearAdded: "2022",
-        rate: 8.4
-    },
-    {
-        src: "https://upload.wikimedia.org/wikipedia/en/7/78/Puss_in_Boots_The_Last_Wish_poster.jpg",
-        title: "Puss in Boots",
-        yearAdded: "2022",
-        rate: 8.4
-    }
-]
+
+// https://api.themoviedb.org/3/movie/now_playing?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US
+// key: db4d89fe51bfd36971ac04f502407713
+const movies = ref([]);
+const url = 'https://api.themoviedb.org/3/movie/now_playing?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US';
+
+onMounted(async () => {
+    const res = await axios.get(url);
+    const results =  res?.data?.results;
+    movies.value = [...movies.value];
+    movies.value = [...results];
+});
 
 </script>
 <template>
-    <swiper :slides-per-view="4" :space-between="50" navigation :modules="modules" class="mySwiper" grabCursor>
-        <SwiperSlide v-for="movie in movies" :key="movie.image">
-            <MovieCard :src="movie.src" :title="movie.title" :yearAdded="movie.yearAdded" :rate="movie.rate">
+    <swiper :slides-per-view="4" :space-between="40"  navigation :modules="modules" class="mySwiper mb-10" grabCursor>
+        <SwiperSlide v-for="movie in movies" :key="movie.id">
+            <MovieCard :title="movie.title" :posterPath="movie.poster_path" :yearAdded="movie.release_date" :rate="movie.vote_average">
             </MovieCard>
         </SwiperSlide>
     </swiper>
