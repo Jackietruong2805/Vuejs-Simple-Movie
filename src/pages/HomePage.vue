@@ -1,4 +1,5 @@
 <script setup>
+
 import {Banner, MovieList, TitleBetween} from "../components";
 
 </script>
@@ -6,11 +7,11 @@ import {Banner, MovieList, TitleBetween} from "../components";
 <template>
     <Banner></Banner>
     <TitleBetween>Now Playing</TitleBetween>
-    <MovieList></MovieList>
+    <MovieList type="now_playing"></MovieList>
     <TitleBetween>Top Rated</TitleBetween>
-    <MovieList></MovieList>
+    <MovieList type="top_rated"></MovieList>
     <TitleBetween>Trending</TitleBetween>
-    <MovieList></MovieList>
+    <MovieList type="popular"></MovieList>
 </template>
 <style>
 

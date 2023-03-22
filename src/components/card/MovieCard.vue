@@ -8,14 +8,15 @@ const props = defineProps({
     title: String,
     yearAdded: String,
     rate: Number,
-    posterPath: String
+    posterPath: String,
+    id: Number
 });
 
 const urlRef = ref(`https://image.tmdb.org/t/p/w500${props?.posterPath}`); 
 
 const getFullYear = (date)=>{
     return new Date(date).getFullYear();
-}
+};
 
 </script>
 
@@ -29,6 +30,6 @@ const getFullYear = (date)=>{
             <span>{{ getFullYear(props.yearAdded) }}</span>
             <span>{{ props.rate }}</span>
         </div>
-        <Button>watch now</Button>
+        <Button :id="props.id" class="py-3 px-6 bg-[#6f5cf1] rounded-lg capitalize leading-6 w-[90%] mx-auto mb-5">watch now</Button>
     </div>
 </template>
