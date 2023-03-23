@@ -2,7 +2,7 @@
 import axios from 'axios';
 import 'swiper/css';
 import { SwiperSlide, Swiper } from 'swiper/vue';
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import Button from '../button/Button.vue';
 const movies = ref([]);
 const genres = ref([]);
@@ -21,6 +21,10 @@ onMounted(async ()=>{
     genres.value = [...genreResult];
 });
 
+const getGenresName = (genreId, genres) => {
+    return genres?.find((genre) => genre.id === genreId)?.name
+};
+
 </script>
 <template>
     <swiper :slides-per-view="1" class="mb-10" grabCursor>
@@ -31,10 +35,10 @@ onMounted(async ()=>{
                     <h2 class="text-[30px] font-semibold leading-8 mb-3">{{ movie.title }}</h2>
                     <ul class="menu flex gap-x-[20px] mb-8">
                         <li class="py-2 px-4 border border-white rounded-md" v-for="genreId in movie.genre_ids" :key="genreId">
-                            {{ genres?.find((genre) => genre.id === genreId)?.name}}
+                            {{ $t("genres." + getGenresName(genreId, genres))}}
                         </li>
                     </ul>
-                    <Button class="px-5 py-3 bg-purple-500 rounded-md" :id="movie.id">Watch now</Button>
+                    <Button class="px-5 py-3 bg-purple-500 rounded-md" :id="movie.id">{{ $t('button.action') }}</Button>
                 </div>
             </div>  
         </SwiperSlide>

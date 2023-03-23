@@ -1,0 +1,35 @@
+{
+    "home":{
+        "NowPlaying": "再生中",
+        "TopRated": "トップレート",
+        "Trending": "トレンド"
+    },
+    "button":{
+        "action": "今見る"
+    },
+    "header": {
+        "Home": "家",
+        "Movies": "映画"
+    },
+    "genres": {
+        "Action": "アクション",
+        "Adventure": "冒険",
+        "Animation": "アニメーション",
+        "Comedy": "コメディ",
+        "Crime": "犯罪",
+        "Documentary": "ドキュメンタリー",
+        "Drama": "ドラマ",
+        "Family": "家族",
+        "Fantasy": "ファンタジー",
+        "History": "歴史",
+        "Horror": "ホラー",
+        "Music": "音楽",
+        "Mystery": "神秘",
+        "Romance": "ロマンス",
+        "Science Fiction": "空想科学小説",
+        "TV Movie": "テレビ映画",
+        "Thriller": "スリラー",
+        "War": "戦争",
+        "Western": "ウエスタン"
+    }
+}

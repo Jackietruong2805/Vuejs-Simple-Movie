@@ -1,16 +1,15 @@
 <script setup>
-
-import {Banner, MovieList, TitleBetween} from "../components";
+import { Banner, MovieList, TitleBetween } from '../components';
 
 </script>
 
 <template>
     <Banner></Banner>
-    <TitleBetween>Now Playing</TitleBetween>
+    <TitleBetween>{{ $t('home.NowPlaying') }}</TitleBetween>
     <MovieList type="now_playing"></MovieList>
-    <TitleBetween>Top Rated</TitleBetween>
+    <TitleBetween>{{ $t('home.TopRated') }}</TitleBetween>
     <MovieList type="top_rated"></MovieList>
-    <TitleBetween>Trending</TitleBetween>
+    <TitleBetween>{{ $t('home.Trending') }}</TitleBetween>
     <MovieList type="popular"></MovieList>
 </template>
 <style>

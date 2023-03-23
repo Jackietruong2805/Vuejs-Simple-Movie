@@ -1,0 +1,35 @@
+{
+    "home":{
+        "NowPlaying": "Now playing",
+        "TopRated": "Top rated",
+        "Trending": "Trending"
+    },
+    "button":{
+        "action": "Watch now"
+    },
+    "header": {
+        "Home": "Home",
+        "Movies": "Movies"
+    },
+    "genres": {
+        "Action": "Action",
+        "Adventure": "Adventure",
+        "Animation": "Animation",
+        "Comedy": "Comedy",
+        "Crime": "Crime",
+        "Documentary": "Documentary",
+        "Drama": "Drama",
+        "Family": "Family",
+        "Fantasy": "Fantasy",
+        "History": "History",
+        "Horror": "Horror",
+        "Music": "Music",
+        "Mystery": "Mystery",
+        "Romance": "Romance",
+        "Science Fiction": "Science Fiction",
+        "TV Movie": "TV Movie",
+        "Thriller": "Thriller",
+        "War": "War",
+        "Western": "Western"
+    } 
+}

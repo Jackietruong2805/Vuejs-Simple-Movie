@@ -9,8 +9,6 @@ import axios from "axios";
 
 const modules = [Navigation]
 
-// https://api.themoviedb.org/3/movie/now_playing?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US
-// key: db4d89fe51bfd36971ac04f502407713
 const props = defineProps({
     type: String   
 });

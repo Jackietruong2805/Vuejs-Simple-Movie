@@ -30,6 +30,6 @@ const getFullYear = (date)=>{
             <span>{{ getFullYear(props.yearAdded) }}</span>
             <span>{{ props.rate }}</span>
         </div>
-        <Button :id="props.id" class="py-3 px-6 bg-[#6f5cf1] rounded-lg capitalize leading-6 w-[90%] mx-auto mb-5">watch now</Button>
+        <Button :id="props.id" class="py-3 px-6 bg-[#6f5cf1] rounded-lg capitalize leading-6 w-[90%] mx-auto mb-5">{{ $t('button.action') }}</Button>
     </div>
 </template>
