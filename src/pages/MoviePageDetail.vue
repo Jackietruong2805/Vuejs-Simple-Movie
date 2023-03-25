@@ -1,6 +1,14 @@
 <script setup>
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
+import { Navigation } from 'swiper';
+import 'swiper/css';
+import { SwiperSlide, Swiper } from 'swiper/vue';
+import 'swiper/css/navigation';
+import { MovieCard } from '../components';
+
+const modules = [Navigation]
+
 
 const props = defineProps({
     id: String
@@ -10,23 +18,36 @@ const results = ref({});
 const genres = ref([]);
 const urlRef = ref(`https://api.themoviedb.org/3/movie/${props?.id}?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US`);
 const castUrlRef = ref(`https://api.themoviedb.org/3/movie/${props?.id}/credits?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US`);
+const videoUrl = ref(`https://api.themoviedb.org/3/movie/${props?.id}/videos?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US`);
+const relatedUrl = ref(`https://api.themoviedb.org/3/movie/${props?.id}/similar?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US&page=1`);
 const casts = ref([]);
+const videos = ref([]);
+const relates = ref([]);
 
-onMounted(async ()=>{
+onMounted(async () => {
     const res = await axios.get(urlRef.value);
-    const data = {...res?.data};
-    console.log("data: ",data)
-    results.value = {...data};
+    const data = { ...res?.data };
+    results.value = { ...data };
     genres.value = [...data?.genres];
     bgImageRef.value.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${data?.backdrop_path})`;
 });
 
-onMounted(async ()=>{
+onMounted(async () => {
     const res = await axios.get(castUrlRef.value);
-    const data = {...res?.data};
+    const data = { ...res?.data };
     casts.value = [...data?.cast?.slice(0, 4)];
-    console.log("casts", casts.value);
 });
+
+onMounted(async () => {
+    const res = await axios.get(videoUrl.value);
+    videos.value = [...res?.data?.results?.slice(0, 2)];
+})
+
+onMounted(async ()=>{
+    const res = await axios.get(relatedUrl.value);
+    relates.value = [...res?.data?.results];
+    console.log("relates.value",relates.value);
+})
 
 
 // MovieLlist Api
@@ -34,6 +55,12 @@ onMounted(async ()=>{
 
 // Credits
 // https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US
+// Video
+// https://api.themoviedb.org/3/movie/{movie_id}/videos?api_key=<<api_key>>&language=en-US
+
+// Related Movies
+// https://api.themoviedb.org/3/movie/{movie_id}/similar?api_key=<<api_key>>&language=en-US&page=1
+
 </script>
 <template>
     <div class="h-[600px] mb-10 bg-cover bg-center rounded-xl relative" ref="bgImageRef">
@@ -41,7 +68,8 @@ onMounted(async ()=>{
     </div>
     <div class="-mt-52 relative z-10 rounded-lg mb-10">
         <div class="max-w-[800px] rounded-lg mx-auto h-[400px]">
-            <img :src="`https://image.tmdb.org/t/p/original${results?.poster_path}`" class="rounded-lg w-full h-full object-cover object-center"/>
+            <img :src="`https://image.tmdb.org/t/p/original${results?.poster_path}`"
+                class="rounded-lg w-full h-full object-cover object-center" />
         </div>
         <h1 class="text-center my-10 text-4xl">{{ results?.title }}</h1>
         <ul class="menu flex justify-center gap-x-[20px] mb-10">
@@ -50,13 +78,36 @@ onMounted(async ()=>{
             </li>
         </ul>
         <p class="text-center leading-8 max-w-[600px] mx-auto mb-20">
-            {{results?.overview}}
+            {{ results?.overview }}
         </p>
-        <h1 class="text-center text-4xl mb-10">Cast</h1>
-        <div class="grid grid-cols-4 gap-x-5">
+        <h1 class="text-center text-4xl mb-10">{{ $t('casts') }}</h1>
+        <div class="grid grid-cols-4 gap-x-5 mb-20">
             <div v-for="cast in casts" :key="cast.id" class="rounded-md">
-                <img :src="`https://image.tmdb.org/t/p/original${cast.profile_path}`" class="block rounded-md object-cover h-[300px] w-full"/>
+                <img :src="`https://image.tmdb.org/t/p/original${cast.profile_path}`"
+                    class="block rounded-md object-cover h-[300px] w-full" />
+                <h1 class="mt-4 font-semibold text-xl">{{ cast?.name }}</h1>
             </div>
+        </div>
+        <div class="mb-20">
+            <div class="mb-10" v-for="video in videos" :key="video.id">
+                <h1 class="text-2xl p-3 bg-purple-500 inline-block mb-5">{{ video?.name }}</h1>
+                <div>
+                    <iframe class="aspect-video w-full" :src="`https://www.youtube.com/embed/${video?.key}`"
+                        title="WHITE LINES (Cocaine Bear Remix) by Pusha T (Official Lyric Video)" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h1 class="text-2xl font-semibold mb-10">{{ $t('relatedMovies') }}</h1>
+            <swiper :slides-per-view="4" :space-between="40"  navigation :modules="modules" class="mySwiper mb-10" grabCursor>
+                <SwiperSlide v-for="relate in relates" :key="relate.id">
+                    <MovieCard :id="relate.id" :title="relate.title" :posterPath="relate.poster_path" :yearAdded="relate.release_date" :rate="relate.vote_average">
+                    </MovieCard>
+                </SwiperSlide>
+            </swiper>
         </div>
     </div>
 </template>

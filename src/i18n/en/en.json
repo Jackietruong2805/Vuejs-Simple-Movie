@@ -32,5 +32,7 @@
         "War": "War",
         "Western": "Western",
         "undefined": ""
-    } 
+    },
+    "casts": "Cast",
+    "relatedMovies": "Related Movies"
 }

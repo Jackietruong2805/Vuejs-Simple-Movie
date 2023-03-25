@@ -7,10 +7,10 @@ import 'swiper/css/navigation';
 import { ref, onMounted } from "vue";
 import axios from "axios";
 
-const modules = [Navigation]
+const modules = [Navigation];
 
 const props = defineProps({
-    type: String   
+    type: String,
 });
 const movies = ref([]);
 const url = `https://api.themoviedb.org/3/movie/${props.type}?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US`;

@@ -1,6 +1,7 @@
 <script setup>
 import { Banner, MovieList, TitleBetween } from '../components';
 
+
 </script>
 
 <template>
