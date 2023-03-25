@@ -35,7 +35,7 @@ const getGenresName = (genreId, genres) => {
                     <h2 class="text-[30px] font-semibold leading-8 mb-3">{{ movie.title }}</h2>
                     <ul class="menu flex gap-x-[20px] mb-8">
                         <li class="py-2 px-4 border border-white rounded-md" v-for="genreId in movie.genre_ids" :key="genreId">
-                            {{ $t("genres." + getGenresName(genreId, genres))}}
+                            {{ $t(`genres.${getGenresName(genreId, genres)}`)}}
                         </li>
                     </ul>
                     <Button class="px-5 py-3 bg-purple-500 rounded-md" :id="movie.id">{{ $t('button.action') }}</Button>

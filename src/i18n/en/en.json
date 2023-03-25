@@ -30,6 +30,7 @@
         "TV Movie": "TV Movie",
         "Thriller": "Thriller",
         "War": "War",
-        "Western": "Western"
+        "Western": "Western",
+        "undefined": ""
     } 
 }

@@ -30,6 +30,7 @@
         "TV Movie": "テレビ映画",
         "Thriller": "スリラー",
         "War": "戦争",
-        "Western": "ウエスタン"
+        "Western": "ウエスタン",
+        "undefined": ""
     }
 }
