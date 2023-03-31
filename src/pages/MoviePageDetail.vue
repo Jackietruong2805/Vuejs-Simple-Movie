@@ -1,14 +1,15 @@
 <script setup>
 import axios from 'axios';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { Navigation } from 'swiper';
 import 'swiper/css';
 import { SwiperSlide, Swiper } from 'swiper/vue';
 import 'swiper/css/navigation';
-import { MovieCard } from '../components';
+import { Button, MovieCard } from '../components';
+import { useRouter } from 'vue-router';
 
-const modules = [Navigation]
-
+const router = useRouter();
+const modules = [Navigation];
 
 const props = defineProps({
     id: String
@@ -23,6 +24,7 @@ const relatedUrl = ref(`https://api.themoviedb.org/3/movie/${props?.id}/similar?
 const casts = ref([]);
 const videos = ref([]);
 const relates = ref([]);
+
 
 onMounted(async () => {
     const res = await axios.get(urlRef.value);
@@ -45,21 +47,15 @@ onMounted(async () => {
 
 onMounted(async ()=>{
     const res = await axios.get(relatedUrl.value);
+    console.log("res", res);
     relates.value = [...res?.data?.results];
     console.log("relates.value",relates.value);
-})
+});
 
+const getFullYear = (date)=>{
+    return new Date(date).getFullYear();
+};
 
-// MovieLlist Api
-// https://api.themoviedb.org/3/genre/movie/list?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US
-
-// Credits
-// https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US
-// Video
-// https://api.themoviedb.org/3/movie/{movie_id}/videos?api_key=<<api_key>>&language=en-US
-
-// Related Movies
-// https://api.themoviedb.org/3/movie/{movie_id}/similar?api_key=<<api_key>>&language=en-US&page=1
 
 </script>
 <template>
@@ -104,8 +100,17 @@ onMounted(async ()=>{
             <h1 class="text-2xl font-semibold mb-10">{{ $t('relatedMovies') }}</h1>
             <swiper :slides-per-view="4" :space-between="40"  navigation :modules="modules" class="mySwiper mb-10" grabCursor>
                 <SwiperSlide v-for="relate in relates" :key="relate.id">
-                    <MovieCard :id="relate.id" :title="relate.title" :posterPath="relate.poster_path" :yearAdded="relate.release_date" :rate="relate.vote_average">
-                    </MovieCard>
+                    <div class="bg-[#1e293b] p-3 leading-6 text-white rounded-lg">
+                        <div class="rounded-lg w-full h-[250px] mb-3">
+                            <img :src="`https://image.tmdb.org/t/p/w500${relate?.poster_path}`" class="rounded-[inherit] block object-cover object-center h-full w-full" />
+                        </div>
+                        <h1 class="font-bold text-[21px] mb-2">{{ relate.title }}</h1>
+                        <div class="flex justify-between items-center text-[14px] text-gray-500 font-bold mb-3">
+                            <span>{{ getFullYear(relate.release_date) }}</span>
+                            <span>{{ relate.vote_average }}</span>
+                        </div>
+                        <Button :id="relate.id" class="py-3 px-6 bg-[#6f5cf1] rounded-lg capitalize leading-6 w-[90%] mx-auto mb-5">{{ $t('button.action') }}</Button>
+                    </div>
                 </SwiperSlide>
             </swiper>
         </div>
