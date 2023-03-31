@@ -3,16 +3,15 @@ import axios from 'axios';
 import {computed, onMounted, ref, watch} from 'vue';
 import { Button } from '../components';
 const isLoading = ref(false);
+const isLoadingMore = ref(false);
 const search = ref('');
 const query = ref('');
+const page = ref(1);
+const pagePopular = ref(1);
 const popularUrl = ref(`https://api.themoviedb.org/3/movie/popular?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US&page=1`);
 const popularMovies = ref([]);
 const searchMovies = ref([]);
-
-// https://api.themoviedb.org/3/movie/popular?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US&page=1
-
-// Search movies
-// https://api.themoviedb.org/3/search/movie?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US&page=1&include_adult=true
+const loadMoreMovies = ref([]);
 
 onMounted(async ()=>{
     const res = await axios.get(popularUrl?.value);
@@ -20,9 +19,8 @@ onMounted(async ()=>{
 });
 
 const fetchSearchMovies = async (newQuery)=>{
-    const res = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US&query=${newQuery}&page=1&include_adult=true`);
+    const res = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US&query=${newQuery}&page=${page?.value}&include_adult=true`);
     searchMovies.value = [...res?.data?.results];
-    console.log("searchMovies.value", searchMovies.value);
 };
 
 watch(query, (newQuery)=>{
@@ -43,7 +41,6 @@ const handleInputChange = ()=>{
         setTimeout(()=>{
             query.value = search.value;
             isLoading.value = false;
-            console.log("query", query.value);
         }, 600);
     }
 };
@@ -51,6 +48,16 @@ const handleInputChange = ()=>{
 
 const getFullYear = (date)=>{
     return new Date(date).getFullYear();
+};
+
+const handleLoadMore = async ()=>{
+    isLoadingMore.value = true;
+    pagePopular.value =  pagePopular.value + 1;
+    popularUrl.value = `https://api.themoviedb.org/3/movie/popular?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US&page=${pagePopular?.value}`
+    const res = await axios.get(popularUrl?.value);
+    loadMoreMovies.value = [...res?.data?.results];
+    popularMovies.value = [...popularMovies.value, ...loadMoreMovies.value];
+    isLoadingMore.value = false;
 };
 
 </script>
@@ -90,5 +97,13 @@ const getFullYear = (date)=>{
             </div>
             <Button :key="popularMovie?.id" :id="popularMovie?.id" class="block py-3 px-6 bg-[#6f5cf1] rounded-lg capitalize leading-6 w-[90%] mx-auto mb-5">{{ $t('button.action') }}</Button>
         </div>
+    </div>
+    <div class="mb-20">
+        <template v-if="!isLoading">
+            <div v-if="isLoadingMore" class="border-2 border-t-transparent border-[#db2777] w-10 h-10 animate-spin mx-auto rounded-full"></div>
+            <button v-else type="button" class="mx-auto block px-5 py-3 bg-pink-600 rounded-md" @click="handleLoadMore">
+                    Load More
+            </button>
+        </template>
     </div>
 </template>

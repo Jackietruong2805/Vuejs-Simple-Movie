@@ -47,9 +47,7 @@ onMounted(async () => {
 
 onMounted(async ()=>{
     const res = await axios.get(relatedUrl.value);
-    console.log("res", res);
     relates.value = [...res?.data?.results];
-    console.log("relates.value",relates.value);
 });
 
 const getFullYear = (date)=>{
