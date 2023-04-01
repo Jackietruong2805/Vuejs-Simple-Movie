@@ -7,7 +7,6 @@ const isLoadingMore = ref(false);
 const search = ref('');
 const query = ref('');
 const page = ref(1);
-const pagePopular = ref(1);
 const popularUrl = ref(`https://api.themoviedb.org/3/movie/popular?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US&page=1`);
 const popularMovies = ref([]);
 const searchMovies = ref([]);
@@ -18,13 +17,13 @@ onMounted(async ()=>{
     popularMovies.value = [...res?.data?.results]; 
 });
 
-const fetchSearchMovies = async (newQuery)=>{
-    const res = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US&query=${newQuery}&page=${page?.value}&include_adult=true`);
+const fetchSearchMovies = async ()=>{
+    const res = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US&query=${search?.value}&page=1&include_adult=true`);
     searchMovies.value = [...res?.data?.results];
 };
 
-watch(query, (newQuery)=>{
-    fetchSearchMovies(newQuery);    
+watch(query, ()=>{
+    fetchSearchMovies();    
 });
 
 watch(search, (newSearch)=>{
@@ -51,13 +50,25 @@ const getFullYear = (date)=>{
 };
 
 const handleLoadMore = async ()=>{
-    isLoadingMore.value = true;
-    pagePopular.value =  pagePopular.value + 1;
-    popularUrl.value = `https://api.themoviedb.org/3/movie/popular?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US&page=${pagePopular?.value}`
-    const res = await axios.get(popularUrl?.value);
-    loadMoreMovies.value = [...res?.data?.results];
-    popularMovies.value = [...popularMovies.value, ...loadMoreMovies.value];
-    isLoadingMore.value = false;
+    try{
+        isLoadingMore.value = true;
+        if(search.value){
+            page.value =  page.value + 1;
+            const res = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US&query=${search?.value}&page=${page?.value}&include_adult=true`);
+            loadMoreMovies.value = [...res?.data?.results];
+            searchMovies.value = [...searchMovies.value, ...loadMoreMovies.value];
+        }else{
+            page.value =  page.value + 1;
+            popularUrl.value = `https://api.themoviedb.org/3/movie/popular?api_key=db4d89fe51bfd36971ac04f502407713&language=en-US&page=${page?.value}`
+            const res = await axios.get(popularUrl?.value);
+            loadMoreMovies.value = [...res?.data?.results];
+            popularMovies.value = [...popularMovies.value, ...loadMoreMovies.value];
+        }
+    }catch(error){
+        throw new Error(error.message);
+    }finally{
+        isLoadingMore.value = false;
+    }
 };
 
 </script>

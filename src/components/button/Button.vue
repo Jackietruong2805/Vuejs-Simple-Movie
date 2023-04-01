@@ -11,8 +11,6 @@ const props =  defineProps({
     id: Number
 });
 
-
-
 const handleNavigate = ()=>{
     router.push({
         name: "movieDetail",
